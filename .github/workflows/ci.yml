@@ -1,0 +1,57 @@
+name: NIK STREAMX Integration CI
+
+on:
+  push:
+    branches: [ main, hardening/phase-1-1 ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend-test:
+    name: Backend Go Microservices Test & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Test Source Resolver
+        run: |
+          cd services/source-resolver
+          go test -v ./...
+
+      - name: Test Auth Service
+        run: |
+          cd services/auth-service
+          go test -v ./...
+
+      - name: Test API Gateway
+        run: |
+          cd services/api-gateway
+          go test -v ./...
+
+  docker-build:
+    name: Docker Infrastructure Compose Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Validate Docker Compose Config
+        run: docker compose -f infra/docker/docker-compose.yml config
+
+  security-scan:
+    name: Secret & Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Scan for Secret Leaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

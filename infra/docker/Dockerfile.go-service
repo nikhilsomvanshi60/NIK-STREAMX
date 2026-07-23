@@ -1,0 +1,22 @@
+FROM golang:1.22-alpine AS builder
+
+WORKDIR /app
+
+ARG SERVICE_PATH
+
+COPY ${SERVICE_PATH}/go.mod .
+RUN if [ -f go.sum ]; then copy ${SERVICE_PATH}/go.sum .; fi
+RUN go mod download || true
+
+COPY ${SERVICE_PATH} .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o /app/service main.go
+
+FROM alpine:3.19
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=builder /app/service .
+
+EXPOSE 8080 8081 8082 8083
+
+CMD ["./service"]
