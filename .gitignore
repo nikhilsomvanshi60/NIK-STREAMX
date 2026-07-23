@@ -1,0 +1,82 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+secrets/
+credentials/
+service-account*.json
+google-services.json
+
+# Go
+bin/
+coverage.out
+*.test
+vendor/
+
+# Android and Gradle
+.gradle/
+**/build/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.apks
+*.aar
+
+# IntelliJ and Android Studio
+.idea/
+*.iml
+out/
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.example.json
+
+# Operating systems
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Node and TV/Web applications
+node_modules/
+dist/
+coverage/
+.vite/
+.next/
+
+# Docker and runtime data
+docker-data/
+postgres-data/
+redis-data/
+minio-data/
+tmp/
+temp/
+
+# Generated media
+downloads/
+uploads/
+transcoded/
+segments/
+*.mp4
+*.mkv
+*.mov
+*.ts
+*.m4s
+
+# Test and debug outputs
+test-results/
+reports/
+screenshots/
