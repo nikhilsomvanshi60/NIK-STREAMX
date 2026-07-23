@@ -31,6 +31,24 @@ func main() {
 		})
 	})
 
+	http.HandleFunc("/api/v1/media/stream", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Accept-Ranges", "bytes")
+		w.Header().Set("Content-Type", "video/mp4")
+
+		rangeHeader := r.Header.Get("Range")
+		if rangeHeader != "" {
+			w.Header().Set("Content-Range", "bytes 0-1048575/157286400")
+			w.Header().Set("Content-Length", "1048576")
+			w.WriteHeader(http.StatusPartialContent)
+			w.Write([]byte("PARTIAL_CONTENT_STREAM_CHUNK"))
+			return
+		}
+
+		w.Header().Set("Content-Length", "157286400")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("FULL_STREAM_CHUNK"))
+	})
+
 	http.HandleFunc("/api/v1/media/items", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
