@@ -1,7 +1,7 @@
-# NIK STREAMX — Web Dev Environment & Chrome Preview Launcher
+# NIK STREAMX — Web Dev Environment and Chrome Preview Launcher
 
 Write-Host "============================================================" -ForegroundColor Red
-Write-Host " NIK STREAMX — Launching Web Preview & Local Stack" -ForegroundColor Cyan
+Write-Host " NIK STREAMX -- Launching Web Preview and Local Stack" -ForegroundColor Cyan
 Write-Host "============================================================" -ForegroundColor Red
 
 # 1. Environment Checks
@@ -20,7 +20,8 @@ if (-not $npmCheck) {
 Write-Host "[OK] Node.js environment detected: $(node -v)" -ForegroundColor Green
 
 # 2. Change Directory to Web App
-Set-Location -Path "$PSScriptRoot\..\apps\web"
+$webAppPath = Join-Path -Path $PSScriptRoot -ChildPath "..\apps\web"
+Set-Location -Path $webAppPath
 
 # 3. Install Web Dependencies if missing
 if (-not (Test-Path "node_modules")) {
@@ -59,7 +60,7 @@ if ($chromePath) {
     Write-Host "[INFO] Opening NIK STREAMX Chrome Preview..." -ForegroundColor Cyan
     Start-Process $chromePath $WebUrl
 } else {
-    Write-Host "[WARN] Chrome executable not found in standard PATH. Please open $WebUrl manually." -ForegroundColor Yellow
+    Write-Host "[WARN] Chrome executable not found. Please open $WebUrl manually." -ForegroundColor Yellow
 }
 
 # 6. Start Vite Server
