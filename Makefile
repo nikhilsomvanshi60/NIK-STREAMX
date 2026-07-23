@@ -21,5 +21,9 @@ docker-up:
 docker-down:
 	docker compose -f infra/docker/docker-compose.yml down -v
 
+dev-web:
+	cd apps/web && npm install && npm run dev
+
 clean:
 	rm -rf services/*/bin
+
