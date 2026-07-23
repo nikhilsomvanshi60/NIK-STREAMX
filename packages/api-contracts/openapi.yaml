@@ -1,0 +1,102 @@
+openapi: 3.1.0
+info:
+  title: NIK STREAMX API Gateway Spec
+  description: Unified API contract for NIK STREAMX streaming services.
+  version: 1.0.0
+paths:
+  /health:
+    get:
+      summary: Health check endpoint
+      responses:
+        '200':
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  service:
+                    type: string
+                    example: api-gateway
+
+  /api/v1/resolve:
+    post:
+      summary: Resolve and validate media URL (HLS/DASH/Direct)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  example: https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+      responses:
+        '200':
+          description: Media descriptor resolved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaDescriptor'
+        '400':
+          description: Invalid URL, SSRF violation, or unsupported media type
+
+  /api/v1/auth/login:
+    post:
+      summary: User login endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  refreshToken:
+                    type: string
+
+components:
+  schemas:
+    MediaDescriptor:
+      type: object
+      properties:
+        sourceId:
+          type: string
+        sourceType:
+          type: string
+          enum: [hls, dash, progressive, drive, fallback]
+        contentType:
+          type: string
+          enum: [vod, live, event]
+        title:
+          type: string
+        playbackUrl:
+          type: string
+        qualities:
+          type: array
+          items:
+            type: string
+        expiresAt:
+          type: string
