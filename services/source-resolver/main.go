@@ -43,7 +43,21 @@ func main() {
 			return
 		}
 
-		// 1. SSRF Validation
+		// 1. Check for Google Drive URL pattern
+		if fileID, err := resolver.ExtractDriveFileID(req.URL); err == nil {
+			log.Printf("[GOOGLE DRIVE RESOLVER] File ID parsed: %s", fileID)
+			descriptor, err := resolver.ParseDriveSource(fileID)
+			if err != nil {
+				w.WriteHeader(http.StatusUnprocessableEntity)
+				json.NewEncoder(w).Encode(map[string]string{"error": "DRIVE_RESOLUTION_FAILED", "details": err.Error()})
+				return
+			}
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(descriptor)
+			return
+		}
+
+		// 2. SSRF Validation for standard HTTP/HTTPS URLs
 		if err := resolver.ValidateURL(req.URL); err != nil {
 			log.Printf("[SECURITY SSRF] URL rejected: %v", err)
 			w.WriteHeader(http.StatusBadRequest)

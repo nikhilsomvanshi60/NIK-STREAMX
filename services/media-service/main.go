@@ -36,6 +36,15 @@ func main() {
 
 		items := []MediaItem{
 			{
+				ID:          "m-drive-001",
+				Title:       "Authorized Google Drive Movie",
+				Description: "Development test movie sourced from authorized Google Drive file ID: 1LIUrB58KbbpOBR1goZp2zuKZeQe45f2E.",
+				StreamURL:   "https://drive.google.com/file/d/1LIUrB58KbbpOBR1goZp2zuKZeQe45f2E/view?usp=drive_link",
+				PosterURL:   "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800",
+				SourceType:  "drive",
+				Tags:        []string{"1080p", "Google Drive", "Movie"},
+			},
+			{
 				ID:          "m-001",
 				Title:       "Legal HLS Open Test Stream (Big Buck Bunny)",
 				Description: "Official legal HLS adaptive bitrate stream for playback verification.",
